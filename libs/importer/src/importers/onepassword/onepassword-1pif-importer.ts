@@ -164,6 +164,16 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
     valueKey: string,
     nameKey: string
   ) {
+    const foundIdx = fields.findIndex(
+      (f) => (f[designationKey] != null ? f[designationKey].toString() : null) === "password"
+    );
+
+    if (foundIdx >= 0) {
+      const passwordItem = fields[foundIdx];
+      fields.splice(foundIdx, 1);
+      fields.unshift(passwordItem);
+    }
+
     fields.forEach((field: any) => {
       if (field[valueKey] == null || field[valueKey].toString().trim() === "") {
         return;
@@ -262,9 +272,9 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
 
       const fieldName = this.isNullOrWhitespace(field[nameKey]) ? "no_name" : field[nameKey];
       if (
-        fieldName === "password" &&
-        cipher.passwordHistory != null &&
-        cipher.passwordHistory.some((h) => h.password === fieldValue)
+        (!this.isNullOrWhitespace(cipher.login.password) && cipher.login.password === fieldValue) ||
+        (cipher.passwordHistory != null &&
+          cipher.passwordHistory.some((h) => h.password === fieldValue))
       ) {
         return;
       }
