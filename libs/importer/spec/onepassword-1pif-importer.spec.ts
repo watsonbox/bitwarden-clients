@@ -436,6 +436,17 @@ describe("1Password 1Pif Importer", () => {
     expect(cipher.login.uris.length).toEqual(1);
     const uriView = cipher.login.uris.shift();
     expect(uriView.uri).toEqual("https://www.google.com");
+
+    // remaining fields as custom fields
+    expect(cipher.fields.length).toEqual(3);
+
+    const fields = cipher.fields;
+    expect(fields[0].name).toEqual("console password");
+    expect(fields[0].value).toEqual("console-password-123");
+    expect(fields[1].name).toEqual("1Password Created At");
+    expect(fields[1].value).toEqual("Wed, 22 Jan 2014 21:37:16 GMT");
+    expect(fields[2].name).toEqual("1Password Updated At");
+    expect(fields[2].value).toEqual("Thu, 02 Feb 2017 21:34:04 GMT");
   });
 
   it('should create concealed field as "hidden" type', async () => {
@@ -448,7 +459,7 @@ describe("1Password 1Pif Importer", () => {
 
     const cipher = ciphers.shift();
     const fields = cipher.fields;
-    expect(fields.length).toEqual(1);
+    expect(fields.length).toEqual(3);
 
     const field = fields.shift();
     expect(field.name).toEqual("console password");
@@ -476,7 +487,7 @@ describe("1Password 1Pif Importer", () => {
     expect(identity.email).toEqual("test@web.de");
 
     // remaining fields as custom fields
-    expect(cipher.fields.length).toEqual(6);
+    expect(cipher.fields.length).toEqual(8);
     const fields = cipher.fields;
     expect(fields[0].name).toEqual("sex");
     expect(fields[0].value).toEqual("male");

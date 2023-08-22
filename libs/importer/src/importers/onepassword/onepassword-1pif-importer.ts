@@ -30,6 +30,11 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
         this.processWinOpVaultItem(item, cipher);
       }
 
+      const createdAt = new Date(item.createdAt * 1000).toUTCString();
+      const updatedAt = new Date(item.updatedAt * 1000).toUTCString();
+      this.processKvp(cipher, "1Password Created At", createdAt, FieldType.Text);
+      this.processKvp(cipher, "1Password Updated At", updatedAt, FieldType.Text);
+
       this.convertToNoteIfNeeded(cipher);
       this.cleanupCipher(cipher);
       this.result.ciphers.push(cipher);
